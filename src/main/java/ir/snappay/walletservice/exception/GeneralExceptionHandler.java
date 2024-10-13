@@ -24,6 +24,12 @@ public class GeneralExceptionHandler {
         return new ResponseEntity<>(createMessage(e),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CustomException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleCustomException(CustomException e){
+        return new ResponseEntity<>(new ExceptionResponse(e.getErrorCode().getValue(),e.getErrorCode().getReason()),HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ProblemDetail handleSecurityException(Exception exception) {

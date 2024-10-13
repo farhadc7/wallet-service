@@ -2,7 +2,9 @@ package ir.snappay.walletservice.controller;
 
 import ir.snappay.walletservice.dto.DepositTransactionDto;
 import ir.snappay.walletservice.dto.WalletResponse;
+import ir.snappay.walletservice.dto.WithdrawTransactionDto;
 import ir.snappay.walletservice.service.WalletService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,12 @@ public class WalletController {
     }
 
     @PostMapping("v1/deposit")
-    public WalletResponse deposit(@RequestBody DepositTransactionDto dto){
-        return walletService.deposit(dto);
+    public void deposit(@Valid @RequestBody DepositTransactionDto dto){
+         walletService.deposit(dto);
+    }
+
+    @PostMapping("v1/withdraw")
+    public void withdraw(@Valid @RequestBody WithdrawTransactionDto dto){
+         walletService.withdraw(dto);
     }
 }

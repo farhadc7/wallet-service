@@ -1,6 +1,7 @@
 package ir.snappay.walletservice.dto;
 
 import ir.snappay.walletservice.enums.TransactionType;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 public class DepositTransactionDto extends TransactionDto{
+    @NotBlank(message = "iban number should be filled")
     private String ibanNumber;
+    @NotBlank(message = "verification code should be filled")
     private String verificationCode;
 }

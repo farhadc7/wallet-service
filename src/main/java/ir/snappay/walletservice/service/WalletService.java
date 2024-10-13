@@ -2,6 +2,7 @@ package ir.snappay.walletservice.service;
 
 import ir.snappay.walletservice.dto.TransactionDto;
 import ir.snappay.walletservice.dto.WalletResponse;
+import ir.snappay.walletservice.dto.WithdrawTransactionDto;
 import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.service.transaction.TransactionService;
 import jakarta.annotation.PostConstruct;
@@ -23,10 +24,17 @@ public class WalletService {
         transactionServiceList.forEach(t->transactionServiceMap.put(t.getType(),t));
     }
 
-    public WalletResponse deposit(TransactionDto dto){
+    public void deposit(TransactionDto dto){
         dto.setType(TransactionType.DEPOSIT);
-        transactionServiceMap.get(TransactionType.DEPOSIT).perform(dto);
-        return null;
+        perform(dto);
     }
 
+    public void withdraw(WithdrawTransactionDto dto) {
+        dto.setType(TransactionType.WITHDRAW);
+        perform(dto);
+    }
+
+    private void perform(TransactionDto dto){
+        transactionServiceMap.get(dto.getType()).perform(dto);
+    }
 }

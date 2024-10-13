@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WithdrawTransaction extends Transaction {
-    @ManyToOne
-    private BankAccount bankAccount;
+    private String bankAccount;
 }

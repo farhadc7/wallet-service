@@ -1,10 +1,12 @@
 package ir.snappay.walletservice.exception;
 
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
+
 
 public enum ErrorCode {
 
-    USER_NOT_FOUND(4001,HttpStatus.Series.CLIENT_ERROR,"user not found exception");
+    NOT_ENOUGH_BALANCE(4001,HttpStatus.Series.CLIENT_ERROR,"balance is not enough.");
 
     private  int value;
     private HttpStatus.Series series;
@@ -15,5 +17,29 @@ public enum ErrorCode {
         this.value= value;
         this.series= series;
         this.reason= reason;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public HttpStatus.Series getSeries() {
+        return series;
+    }
+
+    public void setSeries(HttpStatus.Series series) {
+        this.series = series;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

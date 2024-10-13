@@ -10,4 +10,7 @@ public class CustomException extends RuntimeException{
         this.errorCode = errorCode;
     }
 
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
 }
