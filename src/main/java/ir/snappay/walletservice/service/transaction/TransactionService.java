@@ -1,11 +1,8 @@
 package ir.snappay.walletservice.service.transaction;
 
-import ir.snappay.walletservice.dto.DepositTransactionDto;
 import ir.snappay.walletservice.dto.TransactionDto;
-import ir.snappay.walletservice.entity.DepositTransaction;
 import ir.snappay.walletservice.entity.Transaction;
 import ir.snappay.walletservice.entity.User;
-import ir.snappay.walletservice.enums.TransactionStatus;
 import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.repository.TransactionRepository;
 import ir.snappay.walletservice.util.ContextUtil;
@@ -15,10 +12,12 @@ import java.math.BigDecimal;
 
 @Service
 public abstract class TransactionService {
-    public final TransactionRepository repository;
+    private final TransactionRepository repository;
+    private final TotalBalanceCalculator totalBalanceCalculator;
 
-    public TransactionService(TransactionRepository repository) {
+    public TransactionService(TransactionRepository repository, TotalBalanceCalculator totalBalanceCalculator) {
         this.repository = repository;
+        this.totalBalanceCalculator = totalBalanceCalculator;
     }
 
     public void perform(TransactionDto dto){
@@ -31,15 +30,17 @@ public abstract class TransactionService {
     private void persistTransaction(Transaction trx) {
         synchronized (this){
             BigDecimal balance  = getCurrentBalance(trx.getUser());
-            trx.setCurrentBalance(balance);
-            check(trx);
+            check(trx,balance);
+            setCurrentBalance(trx,balance);
             repository.save(trx);
 
         }
 
     }
 
-    public abstract void check(Transaction trx);
+    protected abstract void setCurrentBalance(Transaction trx, BigDecimal balance);
+
+    public abstract void check(Transaction trx, BigDecimal balance);
 
     public abstract Transaction addDetails(TransactionDto dto);
 
@@ -52,8 +53,8 @@ public abstract class TransactionService {
     }
 
     private BigDecimal getCurrentBalance(User user) {
-        repository.getTransactionSums(user.getMobileNumber());
-        return BigDecimal.ZERO;
+        var sumRes =repository.getTransactionSums(user.getMobileNumber());
+        return totalBalanceCalculator.calculate(sumRes);
     }
 
 

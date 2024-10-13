@@ -8,16 +8,24 @@ import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public  class DepositTransactionService extends TransactionService{
 
 
-    public DepositTransactionService(TransactionRepository repository) {
-        super(repository);
+    public DepositTransactionService(TransactionRepository repository,TotalBalanceCalculator totalBalanceCalculator) {
+        super(repository, totalBalanceCalculator);
     }
 
     @Override
-    public void check(Transaction trx) {
+    protected void setCurrentBalance(Transaction trx, BigDecimal balance) {
+        trx.setCurrentBalance(balance.add(trx.getAmount()));
+
+    }
+
+    @Override
+    public void check(Transaction trx, BigDecimal balance) {
         /*deposit no needs to check*/
     }
 
