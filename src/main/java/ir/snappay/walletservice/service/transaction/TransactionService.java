@@ -1,5 +1,6 @@
 package ir.snappay.walletservice.service.transaction;
 
+import ir.snappay.walletservice.dto.DepositTransactionDto;
 import ir.snappay.walletservice.dto.TransactionDto;
 import ir.snappay.walletservice.entity.DepositTransaction;
 import ir.snappay.walletservice.entity.Transaction;
@@ -10,15 +11,17 @@ import ir.snappay.walletservice.repository.TransactionRepository;
 import ir.snappay.walletservice.util.ContextUtil;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
-public abstract class TransactionService<D extends TransactionDto> {
+public abstract class TransactionService {
     public final TransactionRepository repository;
 
     public TransactionService(TransactionRepository repository) {
         this.repository = repository;
     }
 
-    public void perform(D dto){
+    public void perform(TransactionDto dto){
         Transaction trx= addDetails(dto);
         setGeneralData(dto,trx);
         persistTransaction(trx);
@@ -27,8 +30,10 @@ public abstract class TransactionService<D extends TransactionDto> {
 
     private void persistTransaction(Transaction trx) {
         synchronized (this){
-            getCurrentBalance(trx.getUser());
+            BigDecimal balance  = getCurrentBalance(trx.getUser());
+            trx.setCurrentBalance(balance);
             check(trx);
+            repository.save(trx);
 
         }
 
@@ -36,17 +41,21 @@ public abstract class TransactionService<D extends TransactionDto> {
 
     public abstract void check(Transaction trx);
 
-    public abstract Transaction addDetails(D d);
+    public abstract Transaction addDetails(TransactionDto dto);
 
 
-    private void setGeneralData(D dto, Transaction trx) {
+    private void setGeneralData(TransactionDto dto, Transaction trx) {
         var user= ContextUtil.getUser();
         trx.setUser(user);
         trx.setType(dto.getType());
         trx.setAmount(dto.getAmount());
     }
 
-    private void getCurrentBalance(User user) {
-
+    private BigDecimal getCurrentBalance(User user) {
+        repository.getTransactionSums(user.getMobileNumber());
+        return BigDecimal.ZERO;
     }
+
+
+    public abstract TransactionType getType();
 }

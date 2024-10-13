@@ -7,11 +7,49 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class TransactionSumDto {
-   private Long depositSum;
-   private Long withdrawSum;
-   private Long sendSum;
-   private Long receiveSum;
+   private BigDecimal depositSum;
+   private BigDecimal withdrawSum;
+   private BigDecimal sendSum;
+   private BigDecimal receiveSum;
+
+   public TransactionSumDto(BigDecimal depositSum, BigDecimal withdrawSum, BigDecimal sendSum, BigDecimal receiveSum) {
+      this.depositSum = depositSum;
+      this.withdrawSum = withdrawSum;
+      this.sendSum = sendSum;
+      this.receiveSum = receiveSum;
+   }
+
+   public BigDecimal getDepositSum() {
+      return depositSum;
+   }
+
+   public void setDepositSum(BigDecimal depositSum) {
+      this.depositSum = depositSum;
+   }
+
+   public BigDecimal getWithdrawSum() {
+      return withdrawSum;
+   }
+
+   public void setWithdrawSum(BigDecimal withdrawSum) {
+      this.withdrawSum = withdrawSum;
+   }
+
+   public BigDecimal getSendSum() {
+      return sendSum;
+   }
+
+   public void setSendSum(BigDecimal sendSum) {
+      this.sendSum = sendSum;
+   }
+
+   public BigDecimal getReceiveSum() {
+      return receiveSum;
+   }
+
+   public void setReceiveSum(BigDecimal receiveSum) {
+      this.receiveSum = receiveSum;
+   }
 }
