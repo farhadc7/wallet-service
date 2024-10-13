@@ -6,8 +6,6 @@ import ir.snappay.walletservice.dto.RegisterUserDto;
 import ir.snappay.walletservice.dto.UserDto;
 import ir.snappay.walletservice.entity.User;
 import ir.snappay.walletservice.enums.RoleEnum;
-import ir.snappay.walletservice.exception.CustomException;
-import ir.snappay.walletservice.exception.ErrorCode;
 import ir.snappay.walletservice.mapper.UserMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +32,7 @@ public class AuthenticationService {
     }
 
     public UserDto signup(RegisterUserDto dto){
-        User user= new User(dto.getMobileNumber(),passwordEncoder.encode(dto.getPassword()), RoleEnum.USER);
+        User user= new User(dto.getMobileNumber(),passwordEncoder.encode(dto.getPassword()), RoleEnum.ROLE_USER);
         return userService.save(user);
     }
 
