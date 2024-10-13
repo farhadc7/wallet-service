@@ -20,7 +20,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(indexes = @Index(name = "mobileNumber",columnList = "mobile_number",unique = true))
+@Table(name = "user_tbl",indexes = @Index(name = "mobileNumber",columnList = "mobile_number",unique = true))
 public class User extends BaseEntity implements UserDetails {
     @Column(name = "mobile_number",unique = true,nullable = false)
     @NotBlank(message="mobile number should be filled")
