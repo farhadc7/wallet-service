@@ -11,6 +11,7 @@ import ir.snappay.walletservice.exception.ErrorCode;
 import ir.snappay.walletservice.mapper.UserMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,6 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(dto.getMobileNumber(),dto.getPassword())
         );
         return userService.findByMobileNumber(dto.getMobileNumber())
-                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(()->new UsernameNotFoundException("user not found."));
     }
 }
