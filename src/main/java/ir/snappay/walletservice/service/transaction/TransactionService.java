@@ -7,12 +7,15 @@ import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.exception.CustomException;
 import ir.snappay.walletservice.exception.ErrorCode;
 import ir.snappay.walletservice.repository.TransactionRepository;
+import ir.snappay.walletservice.repository.projection.TransactionSumDto;
 import ir.snappay.walletservice.service.UserService;
 import ir.snappay.walletservice.util.ContextUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public abstract class TransactionService {
@@ -43,7 +46,7 @@ public abstract class TransactionService {
 
     private Transaction persistTransaction(Transaction trx) {
         synchronized (this){
-            BigDecimal balance  = getCurrentBalance(trx.getUser());
+            BigDecimal balance  = getCurrentBalance(trx.getUser().getMobileNumber());
             check(trx,balance);
             setCurrentBalance(trx,balance);
             return repository.save(trx);
@@ -68,8 +71,8 @@ public abstract class TransactionService {
         trx.setAmount(dto.getAmount());
     }
 
-    private BigDecimal getCurrentBalance(User user) {
-        var sumRes =repository.getTransactionSums(user.getMobileNumber());
+    public BigDecimal getCurrentBalance(String mobileNumber) {
+        var sumRes =repository.getTransactionSums(mobileNumber);
         return totalBalanceCalculator.calculate(sumRes);
     }
 
@@ -79,4 +82,10 @@ public abstract class TransactionService {
 
 
     public abstract TransactionType getType();
+
+    public TransactionSumDto getTotalByDate(LocalDateTime minusDays) {
+        TransactionSumDto sumRes =repository.getTransactionSumsAfterDate(ContextUtil.getUser().getUsername(),minusDays);
+        return sumRes;
+
+    }
 }
