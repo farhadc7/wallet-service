@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
 
-    NOT_ENOUGH_BALANCE(4001,HttpStatus.Series.CLIENT_ERROR,"balance is not enough.");
+    NOT_ENOUGH_BALANCE(4001,HttpStatus.Series.CLIENT_ERROR,"balance is not enough."),
+    RECEIVER_USER_NOT_FOUND(4002,HttpStatus.Series.CLIENT_ERROR,"receiver user not found.");
 
     private  int value;
     private HttpStatus.Series series;

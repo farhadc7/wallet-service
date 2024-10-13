@@ -15,10 +15,10 @@ public class TransactionSumDto {
    private BigDecimal receiveSum;
 
    public TransactionSumDto(BigDecimal depositSum, BigDecimal withdrawSum, BigDecimal sendSum, BigDecimal receiveSum) {
-      this.depositSum = depositSum;
-      this.withdrawSum = withdrawSum;
-      this.sendSum = sendSum;
-      this.receiveSum = receiveSum;
+      this.depositSum = depositSum== null?BigDecimal.ZERO:depositSum;
+      this.withdrawSum = withdrawSum== null?BigDecimal.ZERO:withdrawSum;
+      this.sendSum = sendSum == null?BigDecimal.ZERO:sendSum;
+      this.receiveSum = receiveSum ==null?BigDecimal.ZERO:receiveSum;
    }
 
    public BigDecimal getDepositSum() {

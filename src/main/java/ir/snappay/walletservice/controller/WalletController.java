@@ -1,6 +1,7 @@
 package ir.snappay.walletservice.controller;
 
 import ir.snappay.walletservice.dto.DepositTransactionDto;
+import ir.snappay.walletservice.dto.SendTransactionDto;
 import ir.snappay.walletservice.dto.WalletResponse;
 import ir.snappay.walletservice.dto.WithdrawTransactionDto;
 import ir.snappay.walletservice.service.WalletService;
@@ -28,5 +29,10 @@ public class WalletController {
     @PostMapping("v1/withdraw")
     public void withdraw(@Valid @RequestBody WithdrawTransactionDto dto){
          walletService.withdraw(dto);
+    }
+
+    @PostMapping("v1/send")
+    public void send(@Valid @RequestBody SendTransactionDto dto){
+        walletService.send(dto);
     }
 }

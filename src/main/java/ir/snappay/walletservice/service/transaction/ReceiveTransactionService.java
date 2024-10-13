@@ -1,8 +1,8 @@
 package ir.snappay.walletservice.service.transaction;
 
-import ir.snappay.walletservice.dto.DepositTransactionDto;
+import ir.snappay.walletservice.dto.ReceiveTransactionDto;
 import ir.snappay.walletservice.dto.TransactionDto;
-import ir.snappay.walletservice.entity.DepositTransaction;
+import ir.snappay.walletservice.entity.ReceiveTransaction;
 import ir.snappay.walletservice.entity.Transaction;
 import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.repository.TransactionRepository;
@@ -12,12 +12,16 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 @Service
-public  class DepositTransactionService extends TransactionService{
+public  class ReceiveTransactionService extends TransactionService{
+
+    private final UserService userService;
 
 
-    public DepositTransactionService(TransactionRepository repository, TotalBalanceCalculator totalBalanceCalculator, UserService userService) {
+    public ReceiveTransactionService(TransactionRepository repository, TotalBalanceCalculator totalBalanceCalculator, UserService userService) {
         super(repository, totalBalanceCalculator, userService);
+        this.userService = userService;
     }
+
 
     @Override
     protected void setCurrentBalance(Transaction trx, BigDecimal balance) {
@@ -27,22 +31,22 @@ public  class DepositTransactionService extends TransactionService{
 
     @Override
     public void check(Transaction trx, BigDecimal balance) {
-        /*deposit no needs to check*/
+        /*no need check*/
     }
 
 
     @Override
     public Transaction addDetails(TransactionDto dto) {
-        DepositTransactionDto d= (DepositTransactionDto)dto;
-        DepositTransaction trx= new DepositTransaction();
-        trx.setVerificationCode(d.getVerificationCode());
-        trx.setIbanNumber(d.getIbanNumber());
+        ReceiveTransactionDto d= (ReceiveTransactionDto) dto;
+        ReceiveTransaction trx= new ReceiveTransaction();
+        trx.setSender(getUserByMobileNumber(d.getSenderMobileNumber()));
         return trx;
     }
 
     @Override
     public TransactionType getType() {
-        return TransactionType.DEPOSIT;
+        return TransactionType.RECEIVE;
     }
+
 
 }

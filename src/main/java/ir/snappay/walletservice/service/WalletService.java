@@ -1,5 +1,6 @@
 package ir.snappay.walletservice.service;
 
+import ir.snappay.walletservice.dto.SendTransactionDto;
 import ir.snappay.walletservice.dto.TransactionDto;
 import ir.snappay.walletservice.dto.WalletResponse;
 import ir.snappay.walletservice.dto.WithdrawTransactionDto;
@@ -34,7 +35,13 @@ public class WalletService {
         perform(dto);
     }
 
+    public void send(SendTransactionDto dto) {
+        dto.setType(TransactionType.SEND);
+        perform(dto);
+    }
+
     private void perform(TransactionDto dto){
         transactionServiceMap.get(dto.getType()).perform(dto);
     }
+
 }

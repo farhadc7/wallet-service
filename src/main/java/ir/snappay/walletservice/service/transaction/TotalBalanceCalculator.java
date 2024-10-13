@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 @Service
 public class TotalBalanceCalculator {
     public BigDecimal calculate(TransactionSumDto sumDto){
+        if(sumDto== null){
+           return  BigDecimal.ZERO;
+        }
         return  sumDto.getDepositSum().add(sumDto.getReceiveSum()).subtract(sumDto.getWithdrawSum()).subtract(sumDto.getSendSum());
     }
 }

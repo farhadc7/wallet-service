@@ -1,5 +1,5 @@
 package ir.snappay.walletservice.enums;
 
 public enum TransactionType {
-    SEND,RECEiVE,DEPOSIT,WITHDRAW
+    SEND, RECEIVE,DEPOSIT,WITHDRAW
 }
