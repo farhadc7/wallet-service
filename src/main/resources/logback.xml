@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
 
+    <property name="logPath" value="C:\logs"/>
+<!--    <property name="logPath" value="./log"/>-->
+    <property name="LOG_FILE" value="${logPath}/custom.log"/>
+    <property name="LOG_ARCHIVE" value="${logPath}/archive/custom.log" />
+
     <property name="CONSOLE_LOG_PATTERN"
               value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %kvp%n"/>
 
@@ -15,12 +20,24 @@
 
     </appender>
 
+    <appender name="custom-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ARCHIVE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>8</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
     <root level="DEBUG">
         <appender-ref ref="console"/>
     </root>
 
-    <logger name="json.logger" level="DEBUG">
-        <appender-ref ref="console"/> <!--change it to new logger-->
+    <logger name="custom.logger" level="DEBUG">
+        <appender-ref ref="custom-appender"/> <!--change it to new logger-->
     </logger>
 
 </configuration>

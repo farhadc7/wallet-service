@@ -22,7 +22,7 @@ this project is a login based project which user should signup to system and the
 
 ### Features
 - database : postgres
-- logging
+- logging : used logback and aspect component(ControllerLogger) to log start and end of Apis.
 - validations : java validation
 
 ### issues
