@@ -2,8 +2,12 @@ package ir.snappay.walletservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.snappay.walletservice.dto.*;
+import ir.snappay.walletservice.testUtils.TestUtils;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -20,22 +24,34 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = WalletServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class AuthenticationControllerIntegrationTest {
-    TestRestTemplate testRestTemplate = new TestRestTemplate();
-    ObjectMapper mapper = new ObjectMapper();
+
+    @Autowired
+    private TestUtils testUtils;
+
     @LocalServerPort
     private int port;
     private String host = "http://localhost";
     private String signup = "/auth/v1/signup";
     private String login = "/auth/v1/login";
 
+    String signupAddress;
+    String loginAddress ;
+
+    @BeforeEach
+    public void setup(){
+         signupAddress = host + ":" + port + signup;
+         loginAddress = host + ":" + port + login;
+
+    }
+
 
     @Test
     public void testSuccessfulSignup() {
 
         RegisterUserDto dto = new RegisterUserDto("09127293015", "Aa@886622");
-        ResponseEntity<ResponseObject> res = signup(dto);
+        ResponseEntity<ResponseObject> res = testUtils.signup(signupAddress,dto);
 
-        UserDto userDto = getResult(Objects.requireNonNull(res.getBody()).getResponse(), UserDto.class);
+        UserDto userDto = testUtils.getResult(Objects.requireNonNull(res.getBody()).getResponse(), UserDto.class);
 
         assertEquals(HttpStatusCode.valueOf(200), res.getStatusCode());
         assertEquals(dto.getMobileNumber(), userDto.getMobileNumber());
@@ -44,7 +60,7 @@ public class AuthenticationControllerIntegrationTest {
     @Test
     public void testNotValidMobileNumberSignup() {
         RegisterUserDto dto = new RegisterUserDto("0912729", "Aa@886622");
-        ResponseEntity<ResponseObject> res = signup(dto);
+        ResponseEntity<ResponseObject> res = testUtils.signup(signupAddress,dto);
 
         assertEquals(HttpStatusCode.valueOf(400), res.getStatusCode());
         assertTrue(res.getBody().getError().getMessage().contains("mobileNumber not valid"));
@@ -55,11 +71,11 @@ public class AuthenticationControllerIntegrationTest {
     public void testSuccessfulLogin(){
         RegisterUserDto dto = new RegisterUserDto("09127293015", "Aa@886622");
         LoginUserDto login= new LoginUserDto("09127293015", "Aa@886622");
-        signup(dto);
+        testUtils.signup(signupAddress,dto);
 
-       var res= login(login);
+       var res= testUtils.login(loginAddress,login);
 
-        LoginResponse loginResponse = getResult(Objects.requireNonNull(res.getBody()).getResponse(), LoginResponse.class);
+        LoginResponse loginResponse = testUtils.getResult(Objects.requireNonNull(res.getBody()).getResponse(), LoginResponse.class);
         assertNotNull(loginResponse.getToken());
     }
 
@@ -67,9 +83,9 @@ public class AuthenticationControllerIntegrationTest {
     public void testNotValidPasswordLogin(){
         RegisterUserDto dto = new RegisterUserDto("09127293015", "Aa@886622");
         LoginUserDto login= new LoginUserDto("09127293015", "Aa@8866");
-        signup(dto);
+        testUtils.signup(signupAddress,dto);
 
-        var res= login(login);
+        var res= testUtils.login(loginAddress,login);
 
         assertEquals(HttpStatusCode.valueOf(400), res.getStatusCode());
         assertTrue(res.getBody().getError().getMessage().contains("The username or password is incorrect"));
@@ -78,30 +94,4 @@ public class AuthenticationControllerIntegrationTest {
 
 
 
-
-
-
-    private ResponseEntity<ResponseObject> signup(RegisterUserDto dto) {
-        String address = host + ":" + port + signup;
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<RegisterUserDto> req = new HttpEntity<>(dto, headers);
-        ResponseEntity<ResponseObject> resp = testRestTemplate.exchange(address, HttpMethod.POST, req, ResponseObject.class);
-        return resp;
-    }
-
-    private ResponseEntity<ResponseObject> login(LoginUserDto dto) {
-        String address = host + ":" + port + login;
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<LoginUserDto> req = new HttpEntity<>(dto, headers);
-
-            ResponseEntity<ResponseObject> resp = testRestTemplate.exchange(address, HttpMethod.POST, req, ResponseObject.class);
-            return resp;
-
-    }
-
-    private <T> T getResult(Object o, Class<T> t) {
-        return mapper.convertValue(o, t);
-    }
 }
