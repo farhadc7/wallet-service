@@ -118,15 +118,19 @@ public class WalletControllerIntegrationTest {
 
     @Test
     public void TransferMoney() {
-        String senderToken = testUtils.getToken(port, userDto);
+        String senderTokenn = testUtils.getToken(port, userDto);
+        String receiverToken = testUtils.getToken(port, receiverDto);
 
-        deposit(senderToken, new DepositTransactionDto(BigDecimal.valueOf(50000), "12334234234", "verify123"));
-        testUtils.callApi(transferAddress, new TransferDto(BigDecimal.valueOf(20000), receiverDto.getMobileNumber()),senderToken);
+        deposit(senderTokenn, new DepositTransactionDto(BigDecimal.valueOf(50000), "12334234234", "verify123"));
+        testUtils.callApi(transferAddress, new TransferDto(BigDecimal.valueOf(20000), receiverDto.getMobileNumber()),senderTokenn);
 
-        var senderBalance = getBalance(senderToken);
+        var senderBalance = getBalance(senderTokenn);
+        var receiverBalance = getBalance(receiverToken);
 
 
         assertEquals(BigDecimal.valueOf(30000),senderBalance);
+        assertEquals(BigDecimal.valueOf(20000),receiverBalance);
+
 
     }
 

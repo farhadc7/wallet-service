@@ -51,7 +51,7 @@ public class TestUtils {
 
     public String getToken(int port,RegisterUserDto userDto){
         callApi(getAddress(port,signupUri),userDto);
-        var res =callApi(getAddress(port,loginUri),new LoginUserDto(getSampleRegisterDto().getMobileNumber(),getSampleRegisterDto().getPassword()));
+        var res =callApi(getAddress(port,loginUri),new LoginUserDto(userDto.getMobileNumber(),userDto.getPassword()));
         var loginRes= getResult(res.getBody().getResponse(), LoginResponse.class);
         return loginRes.getToken();
     }
@@ -60,10 +60,6 @@ public class TestUtils {
         return  host + ":" + port + uri;
     }
 
-    private RegisterUserDto getSampleRegisterDto(){
-        RegisterUserDto dto = new RegisterUserDto("09127293015", "Aa@886622");
-        return dto;
-    }
     public <T> T getResult(Object o, Class<T> t) {
         return mapper.convertValue(o, t);
     }
