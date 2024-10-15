@@ -11,7 +11,7 @@
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
+            <level>INFO</level>
         </filter>
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
@@ -32,11 +32,11 @@
         </encoder>
     </appender>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="console"/>
     </root>
 
-    <logger name="custom.logger" level="DEBUG">
+    <logger name="custom.logger" level="INFO">
         <appender-ref ref="custom-appender"/> <!--change it to new logger-->
     </logger>
 
