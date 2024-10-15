@@ -19,8 +19,9 @@ this project is a login based project which user should signup to system and the
 
 ### installation and running the project
 1. clone this repository
-2. use docker-compose up --build -d to install and run the project and it's required dependencies on docker environment
-3. to see services and test them we can use swagger address : [Swagger](localhost:8080/swagger-ui.html)
+2. switch to master branch
+3. use docker-compose up --build -d to install and run the project and it's required dependencies on docker environment
+4. to see services and test them we can use swagger address : [Swagger](localhost:8080/swagger-ui.html)
 
 ### how to use this project:
 1. go to [swagger ui](localhost:8080/swagger-ui.html)
