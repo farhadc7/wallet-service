@@ -2,13 +2,11 @@ package ir.snappay.walletservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import ir.snappay.walletservice.dto.DepositTransactionDto;
-import ir.snappay.walletservice.dto.SendTransactionDto;
-import ir.snappay.walletservice.dto.WalletResponse;
-import ir.snappay.walletservice.dto.WithdrawTransactionDto;
+import ir.snappay.walletservice.dto.*;
 import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.repository.projection.TransactionSumDto;
 import ir.snappay.walletservice.service.WalletService;
+import ir.snappay.walletservice.util.ResponseUtil;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,8 +47,8 @@ public class WalletController {
 
     @GetMapping("v1/total-by-period")
     @Operation(summary="user can get total of each type based on time period of days.")
-    public TransactionSumDto getTotalByTypeAndFromTime(@RequestParam(defaultValue = "10") long period){
-        return walletService.getTotalByTimePeriod(period);
+    public ResponseObject<TransactionSumDto> getTotalByTypeAndFromTime(@RequestParam(defaultValue = "10") long period){
+        return ResponseUtil.createResponse(walletService.getTotalByTimePeriod(period));
     }
 
 }

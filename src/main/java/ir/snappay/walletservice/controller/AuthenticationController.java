@@ -2,11 +2,10 @@ package ir.snappay.walletservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import ir.snappay.walletservice.dto.LoginResponse;
-import ir.snappay.walletservice.dto.LoginUserDto;
-import ir.snappay.walletservice.dto.RegisterUserDto;
-import ir.snappay.walletservice.dto.UserDto;
+import ir.snappay.walletservice.dto.*;
+import ir.snappay.walletservice.entity.User;
 import ir.snappay.walletservice.service.AuthenticationService;
+import ir.snappay.walletservice.util.ResponseUtil;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j;
@@ -29,15 +28,15 @@ public class AuthenticationController {
 
     @PostMapping("v1/signup")
     @Operation(summary="register a new user to wallet service")
-    public UserDto register(@Valid @RequestBody RegisterUserDto dto){
+    public ResponseObject<UserDto> register(@Valid @RequestBody RegisterUserDto dto){
         log.info("start register api");
 
-        return authenticationService.signup(dto);
+        return ResponseUtil.createResponse(authenticationService.signup(dto));
     }
 
     @PostMapping("v1/login")
     @Operation(summary ="using this api, users can login to wallet service and access it's functionalities" )
-    public LoginResponse login(@Valid @RequestBody LoginUserDto dto){
-        return authenticationService.login(dto);
+    public ResponseObject<LoginResponse> login(@Valid @RequestBody LoginUserDto dto){
+        return ResponseUtil.createResponse(authenticationService.login(dto));
     }
 }

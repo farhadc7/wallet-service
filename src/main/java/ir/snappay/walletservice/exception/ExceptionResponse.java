@@ -1,15 +1,15 @@
 package ir.snappay.walletservice.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class ExceptionResponse {
     private int code;
     private String message;
+
+
 }
