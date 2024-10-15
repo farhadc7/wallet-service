@@ -22,10 +22,7 @@ public class GeneralExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
-        return new ResponseEntity<>(
-                ResponseObject.builder()
-                        .error(ExceptionResponse.builder()
-                                .message(createMessage(e)).build()).build()
+        return new ResponseEntity<>(createResponse(createMessage(e),400)
                 ,HttpStatus.BAD_REQUEST);
     }
 

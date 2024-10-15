@@ -16,4 +16,10 @@ public class DepositTransactionDto extends TransactionDto{
     private String ibanNumber;
     @NotBlank(message = "verification code should be filled")
     private String verificationCode;
+
+    public DepositTransactionDto(BigDecimal amount,  String ibanNumber, String verificationCode) {
+        super(amount);
+        this.ibanNumber = ibanNumber;
+        this.verificationCode = verificationCode;
+    }
 }

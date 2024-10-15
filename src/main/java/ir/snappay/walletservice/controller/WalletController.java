@@ -41,8 +41,8 @@ public class WalletController {
 
     @GetMapping("v1/balance")
     @Operation(summary="get user balance")
-    public WalletResponse getWalletBalance(){
-        return walletService.getBalance();
+    public ResponseObject<WalletResponse> getWalletBalance(){
+        return ResponseUtil.createResponse(walletService.getBalance());
     }
 
     @GetMapping("v1/total-by-period")

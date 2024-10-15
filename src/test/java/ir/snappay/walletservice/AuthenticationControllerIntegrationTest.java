@@ -1,23 +1,17 @@
 package ir.snappay.walletservice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.snappay.walletservice.dto.*;
 import ir.snappay.walletservice.testUtils.TestUtils;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-
 import java.util.Objects;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -49,7 +43,7 @@ public class AuthenticationControllerIntegrationTest {
     public void testSuccessfulSignup() {
 
         RegisterUserDto dto = new RegisterUserDto("09127293015", "Aa@886622");
-        ResponseEntity<ResponseObject> res = testUtils.signup(signupAddress,dto);
+        ResponseEntity<ResponseObject> res = testUtils.callApi(signupAddress,dto);
 
         UserDto userDto = testUtils.getResult(Objects.requireNonNull(res.getBody()).getResponse(), UserDto.class);
 
@@ -60,7 +54,7 @@ public class AuthenticationControllerIntegrationTest {
     @Test
     public void testNotValidMobileNumberSignup() {
         RegisterUserDto dto = new RegisterUserDto("0912729", "Aa@886622");
-        ResponseEntity<ResponseObject> res = testUtils.signup(signupAddress,dto);
+        ResponseEntity<ResponseObject> res = testUtils.callApi(signupAddress,dto);
 
         assertEquals(HttpStatusCode.valueOf(400), res.getStatusCode());
         assertTrue(res.getBody().getError().getMessage().contains("mobileNumber not valid"));
@@ -71,9 +65,9 @@ public class AuthenticationControllerIntegrationTest {
     public void testSuccessfulLogin(){
         RegisterUserDto dto = new RegisterUserDto("09127293015", "Aa@886622");
         LoginUserDto login= new LoginUserDto("09127293015", "Aa@886622");
-        testUtils.signup(signupAddress,dto);
+        testUtils.callApi(signupAddress,dto);
 
-       var res= testUtils.login(loginAddress,login);
+       var res= testUtils.callApi(loginAddress,login);
 
         LoginResponse loginResponse = testUtils.getResult(Objects.requireNonNull(res.getBody()).getResponse(), LoginResponse.class);
         assertNotNull(loginResponse.getToken());
@@ -83,9 +77,9 @@ public class AuthenticationControllerIntegrationTest {
     public void testNotValidPasswordLogin(){
         RegisterUserDto dto = new RegisterUserDto("09127293015", "Aa@886622");
         LoginUserDto login= new LoginUserDto("09127293015", "Aa@8866");
-        testUtils.signup(signupAddress,dto);
+        testUtils.callApi(signupAddress,dto);
 
-        var res= testUtils.login(loginAddress,login);
+        var res= testUtils.callApi(loginAddress,login);
 
         assertEquals(HttpStatusCode.valueOf(400), res.getStatusCode());
         assertTrue(res.getBody().getError().getMessage().contains("The username or password is incorrect"));

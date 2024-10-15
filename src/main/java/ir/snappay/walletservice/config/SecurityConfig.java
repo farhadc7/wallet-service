@@ -3,6 +3,7 @@ package ir.snappay.walletservice.config;
 import ir.snappay.walletservice.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -48,6 +49,20 @@ public class SecurityConfig {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080"));
+        corsConfiguration.setAllowedMethods(List.of("GET","POST"));
+        corsConfiguration.setAllowedHeaders(List.of("Authorization","Content-type"));
+
+        UrlBasedCorsConfigurationSource source= new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**",corsConfiguration);
+
+        return source;
+    }
+    @Bean
+    @Profile("test")
+    CorsConfigurationSource corsConfigurationSourceTest(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080"));
