@@ -1,13 +1,24 @@
 version: '3.9'
-
 services:
   postgres:
-    image: postgres:14-apline
+    image: postgres:14
+    restart: always
     ports:
       - 5432:5432
     volumes:
       - ./docker/postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD= Pstg@Pass
+      - POSTGRES_PASSWORD=Postgsql@!098
       - POSTGRES_USER=postgres
       - POSTGRES_DB=wallet_db
+
+
+  wallet:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8383:8080"
+    depends_on:
+      - postgres
