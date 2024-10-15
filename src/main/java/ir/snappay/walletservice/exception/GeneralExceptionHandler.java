@@ -37,7 +37,7 @@ public class GeneralExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseObject handleSecurityException(Exception exception) {
         ProblemDetail errorDetail = null;
 
