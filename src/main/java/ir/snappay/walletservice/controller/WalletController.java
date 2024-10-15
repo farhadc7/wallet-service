@@ -55,8 +55,7 @@ public class WalletController {
 
     @GetMapping("v1/all-transactions")
     @Operation(summary="get all transactions of the user.")
-    public ResponseObject<List<Transaction>> getAll(){
-        /*todo expose user!!!!*/
+    public ResponseObject<List<TransactionResponse>> getAll(){
         return ResponseUtil.createResponse(walletService.getAll());
     }
 

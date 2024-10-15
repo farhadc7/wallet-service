@@ -5,6 +5,7 @@ import ir.snappay.walletservice.dto.TransactionDto;
 import ir.snappay.walletservice.entity.ReceiveTransaction;
 import ir.snappay.walletservice.entity.Transaction;
 import ir.snappay.walletservice.enums.TransactionType;
+import ir.snappay.walletservice.mapper.TransactionMapper;
 import ir.snappay.walletservice.repository.TransactionRepository;
 import ir.snappay.walletservice.service.UserService;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,11 @@ public  class ReceiveTransactionService extends TransactionService{
     private final UserService userService;
 
 
-    public ReceiveTransactionService(TransactionRepository repository, TotalBalanceCalculator totalBalanceCalculator, UserService userService) {
-        super(repository, totalBalanceCalculator, userService);
+    public ReceiveTransactionService(TransactionRepository repository,
+                                     TotalBalanceCalculator totalBalanceCalculator,
+                                     UserService userService,
+                                     TransactionMapper mapper) {
+        super(repository, totalBalanceCalculator, userService, mapper);
         this.userService = userService;
     }
 

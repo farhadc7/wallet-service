@@ -26,7 +26,7 @@ this project is a login based project which user should signup to system and the
 1. go to [swagger ui](localhost:8080/swagger-ui.html)
 2. [ signup service to create a new user](http://localhost:8080/swagger-ui/index.html#/authentication%20api/register)
 3. [login service to get a jwt token](http://localhost:8080/swagger-ui/index.html#/authentication%20api/login)
-   1. this jwt token should be put as a header to call following Apis,example: header(Authorization:Bearer jwtToken)
+   1. this jwt token should be put as a header to call following Apis.
 4. [deposit api](http://localhost:8080/swagger-ui/index.html#/wallet%20api/deposit)
 5. [withdraw api](http://localhost:8080/swagger-ui/index.html#/wallet%20api/withdraw)
 6. [transfer](http://localhost:8080/swagger-ui/index.html#/wallet%20api/transfer)
@@ -50,7 +50,11 @@ and I should find better way for this part.
 i used join table strategy for transaction classes. this strategy prevents of data duplication and null fields.
 but for each select it makes a join. so it is not suitable for read data in list. solution is to use a nosql db 
 which holds required data for display in tables. I did not have enough time to implement this idea so I read data 
-from postgres.
+from postgres.</br>
+
+#### 3. pagination <br>
+should use pagination for Apis that return list.
+
 
 
 ### tests

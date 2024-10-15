@@ -8,6 +8,7 @@ import ir.snappay.walletservice.entity.Transaction;
 import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.exception.CustomException;
 import ir.snappay.walletservice.exception.ErrorCode;
+import ir.snappay.walletservice.mapper.TransactionMapper;
 import ir.snappay.walletservice.repository.TransactionRepository;
 import ir.snappay.walletservice.service.UserService;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,12 @@ public  class SendTransactionService extends TransactionService{
     private final ReceiveTransactionService receiveTransactionService;
 
 
-    public SendTransactionService(TransactionRepository repository, TotalBalanceCalculator totalBalanceCalculator, UserService userService, ReceiveTransactionService receiveTransactionService) {
-        super(repository, totalBalanceCalculator, userService);
+    public SendTransactionService(TransactionRepository repository,
+                                  TotalBalanceCalculator totalBalanceCalculator,
+                                  UserService userService,
+                                  ReceiveTransactionService receiveTransactionService,
+                                  TransactionMapper mapper) {
+        super(repository, totalBalanceCalculator, userService, mapper);
         this.receiveTransactionService = receiveTransactionService;
     }
 

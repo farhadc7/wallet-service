@@ -2,6 +2,7 @@ package ir.snappay.walletservice.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import ir.snappay.walletservice.dto.ResponseObject;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -43,6 +44,9 @@ public class GeneralExceptionHandler {
 
         if (exception instanceof BadCredentialsException) {
            return createResponse("The username or password is incorrect",401);
+        }
+        if (exception instanceof DataIntegrityViolationException) {
+            return createResponse("The username exists",400);
         }
 
         if (exception instanceof AccountStatusException) {

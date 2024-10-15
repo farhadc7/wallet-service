@@ -5,6 +5,7 @@ import ir.snappay.walletservice.dto.TransactionDto;
 import ir.snappay.walletservice.entity.DepositTransaction;
 import ir.snappay.walletservice.entity.Transaction;
 import ir.snappay.walletservice.enums.TransactionType;
+import ir.snappay.walletservice.mapper.TransactionMapper;
 import ir.snappay.walletservice.repository.TransactionRepository;
 import ir.snappay.walletservice.service.UserService;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,11 @@ import java.math.BigDecimal;
 public  class DepositTransactionService extends TransactionService{
 
 
-    public DepositTransactionService(TransactionRepository repository, TotalBalanceCalculator totalBalanceCalculator, UserService userService) {
-        super(repository, totalBalanceCalculator, userService);
+    public DepositTransactionService(TransactionRepository repository,
+                                     TotalBalanceCalculator totalBalanceCalculator,
+                                     UserService userService,
+                                     TransactionMapper mapper) {
+        super(repository, totalBalanceCalculator, userService, mapper);
     }
 
     @Override

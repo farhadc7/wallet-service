@@ -1,9 +1,6 @@
 package ir.snappay.walletservice.service;
 
-import ir.snappay.walletservice.dto.TransferDto;
-import ir.snappay.walletservice.dto.TransactionDto;
-import ir.snappay.walletservice.dto.WalletResponse;
-import ir.snappay.walletservice.dto.WithdrawTransactionDto;
+import ir.snappay.walletservice.dto.*;
 import ir.snappay.walletservice.entity.Transaction;
 import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.repository.projection.TransactionSumDto;
@@ -58,7 +55,7 @@ public class WalletService {
 
     }
 
-    public List<Transaction> getAll() {
+    public List<TransactionResponse> getAll() {
         return transactionServiceMap.get(TransactionType.DEPOSIT).getAll();
     }
 }

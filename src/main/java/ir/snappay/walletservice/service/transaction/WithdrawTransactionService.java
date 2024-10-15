@@ -7,6 +7,7 @@ import ir.snappay.walletservice.entity.WithdrawTransaction;
 import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.exception.CustomException;
 import ir.snappay.walletservice.exception.ErrorCode;
+import ir.snappay.walletservice.mapper.TransactionMapper;
 import ir.snappay.walletservice.repository.TransactionRepository;
 import ir.snappay.walletservice.service.UserService;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,12 @@ import java.math.BigDecimal;
 public  class WithdrawTransactionService extends TransactionService{
 
 
-    public WithdrawTransactionService(TransactionRepository repository, TotalBalanceCalculator totalBalanceCalculator, UserService userService) {
-        super(repository, totalBalanceCalculator, userService);
+    public WithdrawTransactionService(TransactionRepository repository,
+                                      TotalBalanceCalculator totalBalanceCalculator,
+                                      UserService userService,
+                                      TransactionMapper mapper
+    ) {
+        super(repository, totalBalanceCalculator, userService, mapper);
     }
 
     @Override

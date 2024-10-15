@@ -1,11 +1,14 @@
 package ir.snappay.walletservice.service.transaction;
 
 import ir.snappay.walletservice.dto.TransactionDto;
+import ir.snappay.walletservice.dto.TransactionResponse;
 import ir.snappay.walletservice.entity.Transaction;
 import ir.snappay.walletservice.entity.User;
+import ir.snappay.walletservice.enums.TransactionStatus;
 import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.exception.CustomException;
 import ir.snappay.walletservice.exception.ErrorCode;
+import ir.snappay.walletservice.mapper.TransactionMapper;
 import ir.snappay.walletservice.repository.TransactionRepository;
 import ir.snappay.walletservice.repository.projection.TransactionSumDto;
 import ir.snappay.walletservice.service.UserService;
@@ -14,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,11 +25,13 @@ public abstract class TransactionService {
     private final TransactionRepository repository;
     private final TotalBalanceCalculator totalBalanceCalculator;
     private final UserService userService;
+    private final TransactionMapper mapper;
 
-    public TransactionService(TransactionRepository repository, TotalBalanceCalculator totalBalanceCalculator, UserService userService) {
+    public TransactionService(TransactionRepository repository, TotalBalanceCalculator totalBalanceCalculator, UserService userService, TransactionMapper mapper) {
         this.repository = repository;
         this.totalBalanceCalculator = totalBalanceCalculator;
         this.userService = userService;
+        this.mapper = mapper;
     }
 
     @Transactional
@@ -50,6 +54,7 @@ public abstract class TransactionService {
             BigDecimal balance  = getCurrentBalance(trx.getUser().getMobileNumber());
             check(trx,balance);
             setCurrentBalance(trx,balance);
+            trx.setStatus(TransactionStatus.DONE);
             return repository.save(trx);
 
         }
@@ -90,7 +95,7 @@ public abstract class TransactionService {
 
     }
 
-    public List<Transaction> getAll() {
-        return repository.findAllByUser_MobileNumber(ContextUtil.getUser().getMobileNumber());
+    public List<TransactionResponse> getAll() {
+        return mapper.entityToDtoList(repository.findAllByUser_MobileNumber(ContextUtil.getUser().getMobileNumber()));
     }
 }
