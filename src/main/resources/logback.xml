@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
 
-    <property name="logPath" value="C:\logs"/>
-<!--    <property name="logPath" value="./log"/>-->
+<!--    <property name="logPath" value="C:\logs"/>-->
+    <property name="logPath" value="./log"/>
     <property name="LOG_FILE" value="${logPath}/custom.log"/>
     <property name="LOG_ARCHIVE" value="${logPath}/archive/custom.log" />
 

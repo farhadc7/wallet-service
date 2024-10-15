@@ -96,6 +96,6 @@ public abstract class TransactionService {
     }
 
     public List<TransactionResponse> getAll() {
-        return mapper.entityToDtoList(repository.findAllByUser_MobileNumber(ContextUtil.getUser().getMobileNumber()));
+        return mapper.entityToDtoList(repository.findAllByUser_MobileNumberOrderByCreatedDateDesc(ContextUtil.getUser().getMobileNumber()));
     }
 }

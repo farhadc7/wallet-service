@@ -1,14 +1,11 @@
 package ir.snappay.walletservice.repository;
 
 import ir.snappay.walletservice.entity.Transaction;
-import ir.snappay.walletservice.entity.User;
-import ir.snappay.walletservice.repository.projection.SumByTransactionType;
 import ir.snappay.walletservice.repository.projection.TransactionSumDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,5 +29,5 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
             "FROM Transaction t WHERE t.user.mobileNumber = :mobileNumber and t.createdDate > :date")
     TransactionSumDto getTransactionSumsAfterDate(@Param("mobileNumber") String mobileNumber,@Param("date") LocalDateTime date);
 
-    List<Transaction> findAllByUser_MobileNumber(String mobileNumber);
+    List<Transaction> findAllByUser_MobileNumberOrderByCreatedDateDesc(String mobileNumber);
 }
