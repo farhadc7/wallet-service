@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public abstract class TransactionService {
@@ -87,5 +88,9 @@ public abstract class TransactionService {
         TransactionSumDto sumRes =repository.getTransactionSumsAfterDate(ContextUtil.getUser().getUsername(),minusDays);
         return sumRes;
 
+    }
+
+    public List<Transaction> getAll() {
+        return repository.findAllByUser_MobileNumber(ContextUtil.getUser().getMobileNumber());
     }
 }

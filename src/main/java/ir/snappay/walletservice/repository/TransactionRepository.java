@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction,Long> {
 
@@ -30,4 +31,6 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
             "SUM(CASE WHEN t.type = 'RECEIVE' THEN t.amount ELSE 0 END) AS receiveSum) " +
             "FROM Transaction t WHERE t.user.mobileNumber = :mobileNumber and t.createdDate > :date")
     TransactionSumDto getTransactionSumsAfterDate(@Param("mobileNumber") String mobileNumber,@Param("date") LocalDateTime date);
+
+    List<Transaction> findAllByUser_MobileNumber(String mobileNumber);
 }

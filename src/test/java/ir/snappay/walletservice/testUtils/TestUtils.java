@@ -1,13 +1,17 @@
 package ir.snappay.walletservice.testUtils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.snappay.walletservice.dto.LoginResponse;
 import ir.snappay.walletservice.dto.LoginUserDto;
 import ir.snappay.walletservice.dto.RegisterUserDto;
 import ir.snappay.walletservice.dto.ResponseObject;
+import ir.snappay.walletservice.entity.Transaction;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TestUtils {
@@ -52,10 +56,6 @@ public class TestUtils {
         return loginRes.getToken();
     }
 
-    public <T> T getResult(Object o, Class<T> t) {
-        return mapper.convertValue(o, t);
-    }
-
     private String getAddress(int port, String uri){
         return  host + ":" + port + uri;
     }
@@ -63,5 +63,12 @@ public class TestUtils {
     private RegisterUserDto getSampleRegisterDto(){
         RegisterUserDto dto = new RegisterUserDto("09127293015", "Aa@886622");
         return dto;
+    }
+    public <T> T getResult(Object o, Class<T> t) {
+        return mapper.convertValue(o, t);
+    }
+
+    public List<Transaction> getResultList(Object response, TypeReference<List<Transaction>> listTypeReference) {
+        return mapper.convertValue(response,listTypeReference);
     }
 }

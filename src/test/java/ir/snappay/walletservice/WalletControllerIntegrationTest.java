@@ -30,25 +30,36 @@ public class WalletControllerIntegrationTest {
     private String depositUri = "/wallet/v1/deposit";
     private String balanceUri = "/wallet/v1/balance";
     private String withdrawUri = "/wallet/v1/withdraw";
+    private String transferUri = "/wallet/v1/transfer";
+    private String allTransactionsUri = "/wallet/v1/all";
 
-    String token;
+//    String token;
     String depositAddress;
     String balanceAddress;
+    String withdrawAddress;
+    String transferAddress;
+    String allTransactionsAddress;
 
     DepositTransactionDto depositDto;
     WithdrawTransactionDto withdrawDto;
     RegisterUserDto userDto;
+    RegisterUserDto receiverDto;
+
 
 
     @BeforeEach
     public void setup() {
         depositAddress = host + ":" + port + depositUri;
         balanceAddress = host + ":" + port + balanceUri;
+        withdrawAddress = host + ":" + port + withdrawUri;
+        transferAddress = host + ":" + port + transferUri;
+        allTransactionsAddress = host + ":" + port + allTransactionsUri;
 
         userDto = new RegisterUserDto("09127293015", "Aa@886622");
-        depositDto = new DepositTransactionDto(new BigDecimal(50), "1234", "100");
+        receiverDto = new RegisterUserDto("09127293018", "Ha@885522");
+        depositDto = new DepositTransactionDto(new BigDecimal(2000), "1234", "100");
 
-        withdrawDto = new WithdrawTransactionDto();
+        withdrawDto = new WithdrawTransactionDto(BigDecimal.valueOf(1000), "123456");
 
 
     }
@@ -56,43 +67,78 @@ public class WalletControllerIntegrationTest {
     @Test
     public void testSuccessfulDeposit() {
         //get token
-        token = testUtils.getToken(port,userDto);
+        String token = testUtils.getToken(port, userDto);
 
         // deposit
         deposit(token, depositDto);
 
         //get balance:
-        var res = testUtils.callGetApi(balanceAddress, token);
-        WalletResponse resp = testUtils.getResult(res.getBody().getResponse(), WalletResponse.class);
+        var balance = getBalance(token);
 
-        assertEquals(2000, resp.getBalance().longValue());
+        assertEquals(BigDecimal.valueOf(2000), balance);
     }
 
     @Test
     public void testNotEnoughAmountDeposit() {
-        token = testUtils.getToken(port,userDto);
+       String token = testUtils.getToken(port, userDto);
 
-        var res = deposit(token, depositDto);
+        var res = deposit(token,
+                new DepositTransactionDto(BigDecimal.valueOf(50), "1234", "324lkj23"));
         assertEquals(400, res.getStatusCode().value());
         assertTrue(res.getBody().getError().getMessage().contains("amount not valid - minimum value is 1000."));
     }
 
     @Test
     public void testSuccessfulWithdraw() {
-        token = testUtils.getToken(port,userDto);
+        String  token = testUtils.getToken(port, userDto);
         deposit(token, depositDto);
 
-        var res = testUtils.callGetApi(balanceAddress, token);
+        testUtils.callApi(withdrawAddress, withdrawDto, token);
 
-        WalletResponse resp = testUtils.getResult(res.getBody().getResponse(), WalletResponse.class);
+        var balance = getBalance(token);
 
-        assertEquals(2000, resp.getBalance().longValue());
+        assertEquals(BigDecimal.valueOf(1000),balance);
     }
+
+    @Test
+    public void testWithdraw_RequestedAmountGreaterThanBalance() {
+        String token = testUtils.getToken(port, userDto);
+        deposit(token, depositDto);
+
+        var withdrawRes = testUtils.callApi(withdrawAddress,
+                new WithdrawTransactionDto(BigDecimal.valueOf(5000), "234")
+                , token);
+
+        var balance= getBalance(token);
+
+        assertEquals(4001, withdrawRes.getBody().getError().getCode());
+        assertTrue(withdrawRes.getBody().getError().getMessage().contains("balance is not enough."));
+        assertEquals(BigDecimal.valueOf(2000),balance);
+    }
+
+    @Test
+    public void TransferMoney() {
+        String senderToken = testUtils.getToken(port, userDto);
+
+        deposit(senderToken, new DepositTransactionDto(BigDecimal.valueOf(50000), "12334234234", "verify123"));
+        testUtils.callApi(transferAddress, new TransferDto(BigDecimal.valueOf(20000), receiverDto.getMobileNumber()),senderToken);
+
+        var senderBalance = getBalance(senderToken);
+
+
+        assertEquals(BigDecimal.valueOf(30000),senderBalance);
+
+    }
+
 
     private ResponseEntity<ResponseObject> deposit(String token, DepositTransactionDto depositDto) {
         var res = testUtils.callApi(depositAddress, depositDto, token);
         return res;
     }
 
+    private BigDecimal getBalance(String inputToken) {
+        var res = testUtils.callGetApi(balanceAddress, inputToken);
+        return testUtils.getResult(res.getBody().getResponse(), WalletResponse.class).getBalance();
+    }
 
 }

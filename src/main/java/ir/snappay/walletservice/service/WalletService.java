@@ -1,9 +1,10 @@
 package ir.snappay.walletservice.service;
 
-import ir.snappay.walletservice.dto.SendTransactionDto;
+import ir.snappay.walletservice.dto.TransferDto;
 import ir.snappay.walletservice.dto.TransactionDto;
 import ir.snappay.walletservice.dto.WalletResponse;
 import ir.snappay.walletservice.dto.WithdrawTransactionDto;
+import ir.snappay.walletservice.entity.Transaction;
 import ir.snappay.walletservice.enums.TransactionType;
 import ir.snappay.walletservice.repository.projection.TransactionSumDto;
 import ir.snappay.walletservice.service.transaction.TransactionService;
@@ -12,7 +13,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +39,7 @@ public class WalletService {
         perform(dto);
     }
 
-    public void send(SendTransactionDto dto) {
+    public void transfer(TransferDto dto) {
         dto.setType(TransactionType.SEND);
         perform(dto);
     }
@@ -56,5 +56,9 @@ public class WalletService {
     public TransactionSumDto getTotalByTimePeriod(long period) {
        return transactionServiceMap.get(TransactionType.DEPOSIT).getTotalByDate(LocalDateTime.now().minusDays(period));
 
+    }
+
+    public List<Transaction> getAll() {
+        return transactionServiceMap.get(TransactionType.DEPOSIT).getAll();
     }
 }

@@ -1,7 +1,7 @@
 package ir.snappay.walletservice.service.transaction;
 
 import ir.snappay.walletservice.dto.ReceiveTransactionDto;
-import ir.snappay.walletservice.dto.SendTransactionDto;
+import ir.snappay.walletservice.dto.TransferDto;
 import ir.snappay.walletservice.dto.TransactionDto;
 import ir.snappay.walletservice.entity.SendTransaction;
 import ir.snappay.walletservice.entity.Transaction;
@@ -26,7 +26,7 @@ public  class SendTransactionService extends TransactionService{
 
     @Override
     public Transaction perform(TransactionDto dto) {
-        SendTransactionDto sd= (SendTransactionDto)dto;
+        TransferDto sd= (TransferDto)dto;
         var trx = super.perform(dto);
         receiveTransactionService.perform(
                 new ReceiveTransactionDto(dto.getAmount(),
@@ -53,7 +53,7 @@ public  class SendTransactionService extends TransactionService{
 
     @Override
     public Transaction addDetails(TransactionDto dto) {
-        SendTransactionDto d= (SendTransactionDto)dto;
+        TransferDto d= (TransferDto)dto;
         SendTransaction trx= new SendTransaction();
         trx.setReceiver(getUserByMobileNumber(d.getReceiverMobileNumber()));
         return trx;
