@@ -53,7 +53,7 @@ public class WalletController {
         return ResponseUtil.createResponse(walletService.getTotalByTimePeriod(period));
     }
 
-    @GetMapping("v1/all")
+    @GetMapping("v1/all-transactions")
     @Operation(summary="get all transactions of the user.")
     public ResponseObject<List<Transaction>> getAll(){
         return ResponseUtil.createResponse(walletService.getAll());
