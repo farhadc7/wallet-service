@@ -1,6 +1,5 @@
 package ir.snappay.walletservice.dto;
 
-import ir.snappay.walletservice.entity.BankAccount;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
